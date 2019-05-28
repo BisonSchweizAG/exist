@@ -33,6 +33,7 @@ import org.exist.util.FileUtils;
 import org.exist.util.Leasable;
 import org.exist.util.crypto.digest.DigestType;
 import org.exist.util.crypto.digest.MessageDigest;
+import org.exist.util.io.ContentFile;
 import org.exist.util.io.FastByteArrayInputStream;
 import org.xml.sax.InputSource;
 import org.xmldb.api.base.Collection;

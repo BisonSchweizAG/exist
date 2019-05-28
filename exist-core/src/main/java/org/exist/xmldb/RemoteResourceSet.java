@@ -31,6 +31,7 @@ import java.util.zip.Inflater;
 import javax.xml.transform.OutputKeys;
 
 import com.evolvedbinary.j8fu.function.FunctionE;
+import com.evolvedbinary.j8fu.lazy.LazyVal;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.logging.log4j.LogManager;
@@ -40,6 +41,7 @@ import org.apache.xmlrpc.client.XmlRpcClient;
 import org.exist.storage.serializers.EXistOutputKeys;
 import org.exist.util.Leasable;
 import org.exist.util.io.TemporaryFileManager;
+import org.exist.util.io.VirtualTempPath;
 import org.xmldb.api.base.ErrorCodes;
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.ResourceIterator;
@@ -56,6 +58,7 @@ public class RemoteResourceSet implements ResourceSet, AutoCloseable {
     private final List resources;
     private final Properties outputProperties;
     private boolean closed;
+    private LazyVal<Integer> inMemoryBufferSize;
 
     private static Logger LOG = LogManager.getLogger(RemoteResourceSet.class.getName());
 
@@ -69,6 +72,13 @@ public class RemoteResourceSet implements ResourceSet, AutoCloseable {
         this.outputProperties = properties;
     }
 
+    private final int getInMemorySize(Properties properties) {
+        if (inMemoryBufferSize == null) {
+            inMemoryBufferSize = new LazyVal<>(() -> Integer.parseInt(properties.getProperty("in-memory-buffer-size", Integer.toString(VirtualTempPath.DEFAULT_IN_MEMORY_SIZE))));
+        }
+        return inMemoryBufferSize.get().intValue();
+    }
+    
     @Override
     public void addResource(final Resource resource) {
         resources.add(resource);
@@ -116,9 +126,8 @@ public class RemoteResourceSet implements ResourceSet, AutoCloseable {
         params.add(outputProperties);
 
         try {
-
-            final Path tmpfile = TemporaryFileManager.getInstance().getTemporaryFile();
-            try (final OutputStream os = Files.newOutputStream(tmpfile)) {
+            VirtualTempPath tempFile = new VirtualTempPath(getInMemorySize(outputProperties), TemporaryFileManager.getInstance());
+            try (final OutputStream os = tempFile.newOutputStream()) {
 
                 Map<?, ?> table = (Map<?, ?>) xmlRpcClient.execute("retrieveAllFirstChunk", params);
 
@@ -163,7 +172,7 @@ public class RemoteResourceSet implements ResourceSet, AutoCloseable {
                 }
 
                 final RemoteXMLResource res = new RemoteXMLResource(leasableXmlRpcClient.lease(), collection, handle, 0, XmldbURI.EMPTY_URI, Optional.empty());
-                res.setContent(tmpfile);
+                res.setContent(tempFile);
                 res.setProperties(outputProperties);
                 return res;
             } catch (final XmlRpcException xre) {
@@ -183,8 +192,6 @@ public class RemoteResourceSet implements ResourceSet, AutoCloseable {
             } catch (final IOException | DataFormatException ioe) {
                 throw new XMLDBException(ErrorCodes.VENDOR_ERROR, ioe.getMessage(), ioe);
             }
-        } catch (final IOException ioe) {
-            throw new XMLDBException(ErrorCodes.VENDOR_ERROR, ioe.getMessage(), ioe);
         } catch (final XmlRpcException xre) {
             throw new XMLDBException(ErrorCodes.INVALID_RESOURCE, xre.getMessage(), xre);
         }

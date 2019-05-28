@@ -19,6 +19,8 @@
  */
 package org.exist.xmldb;
 
+import com.ibm.icu.impl.OlsonTimeZone;
+import com.ibm.icu.util.Output;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
@@ -30,6 +32,7 @@ import org.exist.util.ExistSAXParserFactory;
 import org.exist.util.Leasable;
 import org.exist.util.MimeType;
 import org.exist.util.io.TemporaryFileManager;
+import org.exist.util.io.VirtualTempPath;
 import org.exist.util.serializer.DOMSerializer;
 import org.exist.util.serializer.SAXSerializer;
 import org.exist.xquery.value.StringValue;
@@ -275,11 +278,11 @@ public class RemoteXMLResource
 
     @Override
     public void setContentAsDOM(final Node root) throws XMLDBException {
-        try {
-            final Path tempFile = TemporaryFileManager.getInstance().getTemporaryFile();
-            try (final Writer osw = Files.newBufferedWriter(tempFile, UTF_8)) {
-                final DOMSerializer xmlout = new DOMSerializer(osw, getProperties());
-
+        Properties properties = getProperties();
+        try  {
+            VirtualTempPath tempFile = new VirtualTempPath(getInMemorySize(properties), TemporaryFileManager.getInstance());
+            try (OutputStream out = tempFile.newOutputStream(); OutputStreamWriter osw = new OutputStreamWriter(out, UTF_8)) {
+                final DOMSerializer xmlout = new DOMSerializer(osw, properties);
                 final short type = root.getNodeType();
                 if (type == Node.ELEMENT_NODE || type == Node.DOCUMENT_FRAGMENT_NODE || type == Node.DOCUMENT_NODE) {
                     xmlout.serialize(root);
@@ -289,6 +292,7 @@ public class RemoteXMLResource
             }
             setContent(tempFile);
         } catch (final TransformerException | IOException ioe) {
+            freeResources();
             throw new XMLDBException(ErrorCodes.VENDOR_ERROR, ioe.getMessage(), ioe);
         }
     }
@@ -318,8 +322,8 @@ public class RemoteXMLResource
     }
 
     private class InternalXMLSerializer extends SAXSerializer {
-        private Path tempFile = null;
-        private Writer writer = null;
+        private VirtualTempPath  tempFile = null;
+        private OutputStreamWriter writer = null;
 
         public InternalXMLSerializer() {
             super();
@@ -328,9 +332,8 @@ public class RemoteXMLResource
         @Override
         public void startDocument() throws SAXException {
             try {
-                tempFile = TemporaryFileManager.getInstance().getTemporaryFile();
-
-                writer = Files.newBufferedWriter(tempFile, UTF_8);
+                tempFile = new VirtualTempPath(getInMemorySize(getProperties()), TemporaryFileManager.getInstance());
+                writer = new OutputStreamWriter(tempFile.newOutputStream(), UTF_8);
                 setOutput(writer, new Properties());
 
             } catch (final IOException ioe) {
@@ -346,6 +349,7 @@ public class RemoteXMLResource
 
             try {
                 if (writer != null) {
+                    writer.flush();
                     writer.close();
                 }
 
