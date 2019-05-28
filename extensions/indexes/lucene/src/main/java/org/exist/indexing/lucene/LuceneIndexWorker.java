@@ -174,6 +174,8 @@ public class LuceneIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
             case REMOVE_BINARY:
             	removePlainTextIndexes();
             	break;
+            default:
+                break;
         }
     }
 
@@ -211,6 +213,8 @@ public class LuceneIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
                 break;
             case REMOVE_SOME_NODES:
                 nodesToRemove = new TreeSet<>();
+                break;
+            default:
                 break;
         }
     }

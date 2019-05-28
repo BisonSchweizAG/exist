@@ -652,4 +652,24 @@ public class SessionImpl implements IoSession, Session {
 		return null;
 	}
 
+  @Override
+  public CloseFuture closeNow() {
+    return null;
+  }
+
+  @Override
+  public CloseFuture closeOnFlush() {
+    return null;
+  }
+
+  @Override
+  public boolean isActive() {
+    return false;
+  }
+
+  @Override
+  public boolean isSecured() {
+    return false;
+  }
+
 }

@@ -484,6 +484,8 @@ public class NativeStructuralIndexWorker implements IndexWorker, StructuralIndex
                 break;
             case REMOVE_SOME_NODES:
                 removeSome();
+            default:
+              break;
         }
     }
 

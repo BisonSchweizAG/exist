@@ -61,6 +61,8 @@ public class SortIndexWorker implements IndexWorker {
             case REMOVE_ALL_NODES:
                 remove(document);
                 break;
+            default:
+                break;
         }
     }
 

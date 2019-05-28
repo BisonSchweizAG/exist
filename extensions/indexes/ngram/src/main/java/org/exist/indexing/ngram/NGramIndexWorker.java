@@ -169,6 +169,8 @@ public class NGramIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
             case REMOVE_SOME_NODES:
                 dropIndex(mode);
                 break;
+            default:
+                break;
         }
     }
 

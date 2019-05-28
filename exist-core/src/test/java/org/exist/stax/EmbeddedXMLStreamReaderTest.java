@@ -434,7 +434,7 @@ public class EmbeddedXMLStreamReaderTest {
                 broker.removeCollection(transaction, collection);
             }
         } finally {
-            if (collection == null) {
+            if (collection != null) {
                 collection.getLock().release(Lock.LockMode.WRITE_LOCK);
             }
         }

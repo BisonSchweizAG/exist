@@ -303,6 +303,8 @@ public class ArrayFunction extends BasicFunction {
                         return getFunction(args[2], ref -> array.foldRight(ref, args[1]));
                     case FOR_EACH_PAIR:
                         return getFunction(args[2], ref -> array.forEachPair((ArrayType) args[1].itemAt(0), ref));
+                    default:
+                        break;
                 }
         }
         throw new XPathException(this, "Unknown function: " + getName());

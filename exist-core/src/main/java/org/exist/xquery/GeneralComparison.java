@@ -1191,6 +1191,9 @@ public class GeneralComparison extends BinaryOp implements Optimizable, IndexUse
                 relation = Comparison.LTEQ;
                 break;
                 //What about Comparison.EQand Comparison.NEQ? Well, it seems to never be called
+            default:
+                break;
+                
         }
         final Expression right = getRight();
         setRight(getLeft());
