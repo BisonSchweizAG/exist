@@ -38,11 +38,9 @@ import org.exist.util.FileUtils;
  * @author Patrick Reinhart <patrick@reini.net>
  */
 @ThreadSafe
-public final class VirtualTempPath implements ContentFile {
-    public static final int DEFAULT_IN_MEMORY_SIZE = 4 * 1024 * 1024; // 4 MB
-
-    private static final byte[] EMPTY_BUFFER = new byte[0];
+public final class VirtualTempPath implements AutoCloseable {
     private static final Log LOG = LogFactory.getLog(VirtualTempPath.class);
+    private static final byte[] EMPTY_BUFFER = new byte[0];
 
     private final int inMemorySize;
     private final StampedLock lock;
@@ -146,7 +144,8 @@ public final class VirtualTempPath implements ContentFile {
         try {
             if (contentFile != null) {
                 return Files.readAllBytes(contentFile);
-            } else if (content != null) {
+            }
+            if (content != null) {
                 byte[] buffer = new byte[(int) content.size()];
                 content.read(buffer, 0L, 0, buffer.length);
                 return buffer;
