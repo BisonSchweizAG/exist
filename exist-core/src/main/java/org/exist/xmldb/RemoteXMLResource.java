@@ -19,8 +19,6 @@
  */
 package org.exist.xmldb;
 
-import com.ibm.icu.impl.OlsonTimeZone;
-import com.ibm.icu.util.Output;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
