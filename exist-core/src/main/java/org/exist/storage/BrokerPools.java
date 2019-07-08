@@ -28,6 +28,7 @@ import org.exist.util.DatabaseConfigurationException;
 import com.evolvedbinary.j8fu.function.ConsumerE;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -50,7 +51,7 @@ abstract class BrokerPools {
     private static final Logger LOG = LogManager.getLogger(BrokerPools.class);
 
     private static final ReadWriteLock instancesLock = new ReentrantReadWriteLock();
-    @GuardedBy("instancesLock") private static final Map<String, BrokerPool> instances = new TreeMap<>();
+    @GuardedBy("instancesLock") private static final Map<String, BrokerPool> instances = new ConcurrentHashMap<>();
 
     /**
      * The name of a default database instance
