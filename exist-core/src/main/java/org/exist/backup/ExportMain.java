@@ -101,6 +101,7 @@ public class ExportMain {
                 config = new Configuration();
             }
             config.setProperty(BrokerPool.PROPERTY_EXPORT_ONLY, Boolean.TRUE);
+            config.setProperty(BrokerPool.PROPERTY_SYNC_PERIOD, Long.valueOf(0)); // disable sync tasks (to prevent dead locks)
             BrokerPool.configure(1, 5, config);
             return (BrokerPool.getInstance());
         } catch (final DatabaseConfigurationException | EXistException e) {
