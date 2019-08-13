@@ -309,8 +309,12 @@ abstract class BrokerPools {
         final Lock writeLock = instancesLock.writeLock();
         writeLock.lock();
         try {
+            // copy the instance names into a list of Strings, to iterate over afterwards
             List<String> instanceNames = new ArrayList<>();
-            instances.keySet().addAll(instanceNames);
+            Set<String> instancesKeys = instances.keySet();
+            for (String instanceName : instancesKeys) {
+              instanceNames.add(instanceName);
+            }
             for (String instanceName : instanceNames) {
                 BrokerPool instance = instances.get(instanceName);
                 if (instance != null) {
