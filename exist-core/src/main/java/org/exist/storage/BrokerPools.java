@@ -309,13 +309,18 @@ abstract class BrokerPools {
         final Lock writeLock = instancesLock.writeLock();
         writeLock.lock();
         try {
-            for (final BrokerPool instance : instances.values()) {
-                if (instance.isInstanceConfigured()) {
-                    //Shut it down
-                    instance.shutdown(killed);
+            List<String> instanceNames = new ArrayList<>();
+            instances.keySet().addAll(instanceNames);
+            for (String instanceName : instanceNames) {
+                BrokerPool instance = instances.get(instanceName);
+                if (instance != null) {
+                  if (instance.isInstanceConfigured()) {
+                      // shut it down
+                      instance.shutdown(killed);
+                  }
+                  instances.remove(instanceName);
                 }
             }
-
             // Clear the living instances container : they are all sentenced to death...
             assert(instances.size() == 0); // should have all been removed by BrokerPool#shutdown(boolean)
             instances.clear();
