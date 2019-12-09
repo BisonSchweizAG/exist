@@ -28,7 +28,6 @@ import org.exist.util.DatabaseConfigurationException;
 import com.evolvedbinary.j8fu.function.ConsumerE;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -51,7 +50,7 @@ abstract class BrokerPools {
     private static final Logger LOG = LogManager.getLogger(BrokerPools.class);
 
     private static final ReadWriteLock instancesLock = new ReentrantReadWriteLock();
-    @GuardedBy("instancesLock") private static final Map<String, BrokerPool> instances = new ConcurrentHashMap<>();
+    @GuardedBy("instancesLock") private static final Map<String, BrokerPool> instances = new TreeMap<>();
 
     /**
      * The name of a default database instance
@@ -309,26 +308,16 @@ abstract class BrokerPools {
         final Lock writeLock = instancesLock.writeLock();
         writeLock.lock();
         try {
-            // take a snapshot of the instance names
-            List<String> instanceNames = new ArrayList<>();
-            Set<String> instancesKeys = instances.keySet();
-            for (String instanceName : instancesKeys) {
-              instanceNames.add(instanceName);
-            }
-            // iterate over the snapshot, but be prepared that an instance could already be gone
-            for (String instanceName : instanceNames) {
-                BrokerPool instance = instances.get(instanceName);
-                if (instance != null) {
-                    if (instance.isInstanceConfigured()) {
-                        // shut it down
-                        instance.shutdown(killed);
-                    }
-                    instances.remove(instanceName);
+            for (final Iterator<BrokerPool> poolIterator = instances.values().iterator(); poolIterator.hasNext(); ) {
+                BrokerPool instance = poolIterator.next();                
+                if (instance.isInstanceConfigured()) {
+                    //Shut it down
+                    instance.shutdown(killed, instanceName -> poolIterator.remove());
                 }
             }
+
             // Clear the living instances container : they are all sentenced to death...
-            assert(instances.size() == 0); // should have all been removed by BrokerPool#shutdown(boolean)
-            instances.clear();
+            assert(instances.isEmpty()); // should have all been removed by BrokerPool#shutdown(boolean)
         } finally {
             writeLock.unlock();
         }
