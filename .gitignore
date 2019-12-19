@@ -55,6 +55,7 @@ nbproject/build/
 nbproject/private/
 Project_Default.xml
 start.jar
+junit*.properties
 target/
 test/external/
 test/junit/
