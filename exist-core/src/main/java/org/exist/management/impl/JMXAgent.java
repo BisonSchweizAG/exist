@@ -35,49 +35,36 @@ import javax.management.MBeanServer;
 import javax.management.MBeanServerFactory;
 import javax.management.MalformedObjectNameException;
 import javax.management.NotCompliantMBeanException;
-import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 import java.util.*;
 
 /**
  * Real implementation of interface {@link org.exist.management.Agent}
  * which registers MBeans with the MBeanServer.
+ *
+ * Note that the agent will be constructed via reflection by the
+ * {@link org.exist.management.AgentFactory}
  */
 public final class JMXAgent implements Agent {
 
     private final static Logger LOG = LogManager.getLogger(JMXAgent.class);
 
-    private static volatile Agent agent = null;
-
     private final MBeanServer server;
     private final Map<String, Deque<ObjectName>> registeredMBeans = new HashMap<>();
     private final Map<ObjectName, Object> beanInstances = new HashMap<>();
 
-    public static Agent getInstance() {
-        if (agent == null) {
-            agent = new JMXAgent();
-        }
-        return agent;
-    }
-
-    private JMXAgent() {
+    public JMXAgent() {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Creating the JMX MBeanServer.");
         }
 
         final ArrayList<MBeanServer> servers = MBeanServerFactory.findMBeanServer(null);
-        if (servers.size() > 0)
-            {server = servers.get(0);}
-        else
-            {server = MBeanServerFactory.createMBeanServer();}
+        if (servers.size() > 0) {
+            server = servers.get(0);
+        } else {
+            server = MBeanServerFactory.createMBeanServer();
+        }
 
-//        try {
-//            JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://127.0.0.1:9999/server");
-//            JMXConnectorServer cs = JMXConnectorServerFactory.newJMXConnectorServer(url, null, server);
-//            cs.start();
-//        } catch (IOException e) {
-//            LOG.warn("ERROR: failed to initialize JMX connector: " + e.getMessage(), e);
-//        }
         registerSystemMBeans();
     }
 
