@@ -35,6 +35,7 @@ import javax.management.MBeanServer;
 import javax.management.MBeanServerFactory;
 import javax.management.MalformedObjectNameException;
 import javax.management.NotCompliantMBeanException;
+import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 import java.util.*;
 
@@ -42,7 +43,7 @@ import java.util.*;
  * Real implementation of interface {@link org.exist.management.Agent}
  * which registers MBeans with the MBeanServer.
  */
-public class JMXAgent implements Agent {
+public final class JMXAgent implements Agent {
 
     private final static Logger LOG = LogManager.getLogger(JMXAgent.class);
 
@@ -59,7 +60,7 @@ public class JMXAgent implements Agent {
         return agent;
     }
 
-    public JMXAgent() {
+    private JMXAgent() {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Creating the JMX MBeanServer.");
         }
@@ -96,19 +97,20 @@ public class JMXAgent implements Agent {
     @Override
     public void initDBInstance(BrokerPool instance) {
         try {
-            addMBean(instance.getId(), "org.exist.management." + instance.getId() + ":type=Database",
+            String instanceId = instance.getId();
+            addMBean(instanceId, "org.exist.management." + instanceId + ":type=Database",
                     new org.exist.management.impl.Database(instance));
             
-            addMBean(instance.getId(), "org.exist.management." + instance.getId() + ".tasks:type=SanityReport",
+            addMBean(instanceId, "org.exist.management." + instanceId + ".tasks:type=SanityReport",
                     new SanityReport(instance));
             
-            addMBean(instance.getId(), "org.exist.management." + instance.getId() + ":type=DiskUsage",
+            addMBean(instanceId, "org.exist.management." + instanceId + ":type=DiskUsage",
                     new DiskUsage(instance));
 
-            addMBean(instance.getId(), "org.exist.management." + instance.getId() + ":type=ProcessReport",
+            addMBean(instanceId, "org.exist.management." + instanceId + ":type=ProcessReport",
                     new ProcessReport(instance));
 
-            addMBean(instance.getId(), "org.exist.management." + instance.getId() + ":type=BinaryValues",
+            addMBean(instanceId, "org.exist.management." + instanceId + ":type=BinaryValues",
                     new BinaryValues());
                         
         } catch (final DatabaseConfigurationException e) {
@@ -118,19 +120,14 @@ public class JMXAgent implements Agent {
 
     @Override
     public synchronized void closeDBInstance(BrokerPool instance) {
-        try {
-            final Deque<ObjectName> stack = registeredMBeans.get(instance.getId());
-            while (!stack.isEmpty()) {
-                final ObjectName on = stack.pop();
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("deregistering JMX MBean: " + on);
-                }
-                if (server.isRegistered(on)) {
-                    server.unregisterMBean(on);
-                }
+        final Deque<ObjectName> stack = registeredMBeans.get(instance.getId());
+        while (!stack.isEmpty()) {
+            final ObjectName on = stack.pop();
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("deregistering JMX MBean: " + on);
             }
-        } catch (final InstanceNotFoundException | MBeanRegistrationException e) {
-            LOG.warn("Problem found while unregistering JMX", e);
+            beanInstances.remove(on);
+            removeMBean(on);
         }
     }
 
@@ -163,6 +160,16 @@ public class JMXAgent implements Agent {
         } catch (final InstanceAlreadyExistsException | MBeanRegistrationException | NotCompliantMBeanException e) {
             LOG.warn("Problem registering mbean: " + e.getMessage(), e);
             throw new DatabaseConfigurationException("Exception while registering JMX mbean: " + e.getMessage());
+        }
+    }
+
+    private void removeMBean(ObjectName name) {
+        try {
+            if (server.isRegistered(name)) {
+                server.unregisterMBean(name);
+            }
+        } catch (final InstanceNotFoundException | MBeanRegistrationException  e) {
+            LOG.warn("Problem unregistering mbean: " + e.getMessage(), e);
         }
     }
 
