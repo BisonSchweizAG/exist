@@ -35,6 +35,7 @@ import org.exist.util.StringInputSource;
 import org.exist.xmldb.XmldbURI;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.xml.sax.InputSource;
@@ -84,7 +85,7 @@ public class JournalXmlTest extends AbstractJournalTest<String> {
         Files.write(testFile2, Arrays.asList("<element2>text2</element2>"), CREATE_NEW);
     }
 
-    @Test
+    @Test @Ignore
     public void largeJournalEntry_nonCorrupt() throws IllegalAccessException, EXistException, NoSuchFieldException, LockException, SAXException, PermissionDeniedException, IOException {
         checkpointJournalAndSwitchFile();
 
@@ -113,7 +114,7 @@ public class JournalXmlTest extends AbstractJournalTest<String> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void largeJournalEntry_corrupt() throws IllegalAccessException, EXistException, NoSuchFieldException, LockException, SAXException, PermissionDeniedException, IOException {
         checkpointJournalAndSwitchFile();
 

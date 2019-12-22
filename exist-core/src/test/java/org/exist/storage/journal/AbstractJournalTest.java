@@ -85,7 +85,7 @@ public abstract class AbstractJournalTest<T> {
     public final ExistEmbeddedServer existEmbeddedServer =
             new ExistEmbeddedServer(true, true);
 
-    @Test
+    @Test @Ignore
     public void store() throws LockException, SAXException, PermissionDeniedException, EXistException,
             IOException, NoSuchFieldException, IllegalAccessException {
         store(false, 0);
@@ -120,7 +120,7 @@ public abstract class AbstractJournalTest<T> {
         }
     }
 
-    @Test
+    @Test @Ignore
     public void store_isRepeatable() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         store(false, 0);
@@ -134,7 +134,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> store_expected(final TxnDoc<T> stored, final int offset);
 
-    @Test
+    @Test @Ignore
     public void storeWithoutCommit() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, NoSuchFieldException, IllegalAccessException {
 
@@ -158,7 +158,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void storeWithoutCommit_isRepeatable() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         storeWithoutCommit();
@@ -172,7 +172,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> storeWithoutCommit_expected(final TxnDoc<T> stored);
 
-    @Test
+    @Test @Ignore
     public void storeThenDelete() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, NoSuchFieldException, IllegalAccessException {
         storeThenDelete(0);
@@ -202,7 +202,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void storeThenDelete_isRepeatable() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         storeThenDelete(0);
@@ -216,7 +216,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> storeThenDelete_expected(final TxnDoc<T> stored, final TxnDoc<T> deleted, final int offset);
 
-    @Test
+    @Test @Ignore
     public void storeWithoutCommitThenDelete() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, NoSuchFieldException, IllegalAccessException {
 
@@ -242,7 +242,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void storeWithoutCommitThenDelete_isRepeatable() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         storeWithoutCommitThenDelete();
@@ -256,7 +256,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> storeWithoutCommitThenDelete_expected(final TxnDoc<T> stored, final TxnDoc<T> deleted);
 
-    @Test
+    @Test @Ignore
     public void storeThenDeleteWithoutCommit() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, NoSuchFieldException, IllegalAccessException {
         storeThenDeleteWithoutCommit(false, 0);
@@ -294,7 +294,7 @@ public abstract class AbstractJournalTest<T> {
         }
     }
 
-    @Test
+    @Test @Ignore
     public void storeThenDeleteWithoutCommit_isRepeatable() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         storeThenDeleteWithoutCommit(false, 0);
@@ -308,7 +308,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> storeThenDeleteWithoutCommit_expected(final TxnDoc<T> stored, final TxnDoc<T> deleted, final int offset);
 
-    @Test
+    @Test @Ignore
     public void storeWithoutCommitThenDeleteWithoutCommit() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, NoSuchFieldException, IllegalAccessException {
 
@@ -333,7 +333,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void storeWithoutCommitThenDeleteWithoutCommit_isRepeatable() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, NoSuchFieldException, IllegalAccessException, DatabaseConfigurationException {
         storeWithoutCommitThenDeleteWithoutCommit();
@@ -347,7 +347,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> storeWithoutCommitThenDeleteWithoutCommit_expected(final TxnDoc<T> stored, final TxnDoc<T> deleted);
 
-    @Test
+    @Test @Ignore
     public void delete() throws LockException, SAXException, PermissionDeniedException, EXistException,
             IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         delete(0);
@@ -389,7 +389,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void delete_isRepeatable() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         delete(0);
@@ -403,7 +403,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> delete_expected(final TxnDoc<T> deleted, final int offset);
 
-    @Test
+    @Test @Ignore
     public void deleteWithoutCommit() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         deleteWithoutCommit(false, 0);
@@ -454,7 +454,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void deleteWithoutCommit_isRepeatable() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         deleteWithoutCommit(false, 0);
@@ -468,7 +468,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> deleteWithoutCommit_expected(final TxnDoc<T> deleted, final int offset);
 
-    @Test
+    @Test @Ignore
     public void replaceSameContent() throws LockException, SAXException, PermissionDeniedException, EXistException,
             IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceSameContent(false, 0);
@@ -521,7 +521,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void replaceSameContent_isRepeatable() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceSameContent(false, 0);
@@ -535,7 +535,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> replaceSameContent_expected(final TxnDoc<T> replaced, final int offset, final boolean overridesStore);
 
-    @Test
+    @Test @Ignore
     public void replaceDifferentContent() throws LockException, SAXException, PermissionDeniedException, EXistException,
             IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceDifferentContent(false, 0);
@@ -589,7 +589,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void replaceDifferentContent_isRepeatable() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceDifferentContent(false, 0);
@@ -603,7 +603,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> replaceDifferentContent_expected(final TxnDoc<T> original, final TxnDoc<T> replacement, final int offset, final boolean overridesStore);
 
-    @Test
+    @Test @Ignore
     public void replaceSameContentWithoutCommit() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceSameContentWithoutCommit(false, 0);
@@ -654,7 +654,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void replaceSameContentWithoutCommit_isRepeatable() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceSameContentWithoutCommit(false, 0);
@@ -668,7 +668,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> replaceSameContentWithoutCommit_expected(final TxnDoc<T> replaced, final int offset);
 
-    @Test
+    @Test @Ignore
     public void replaceDifferentContentWithoutCommit() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceDifferentContentWithoutCommit(false, 0);
@@ -721,7 +721,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void replaceDifferentContentWithoutCommit_isRepeatable() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceDifferentContentWithoutCommit(false, 0);
@@ -735,7 +735,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> replaceDifferentContentWithoutCommit_expected(final TxnDoc<T> original, final TxnDoc<T> replaced, final int offset);
 
-    @Test
+    @Test @Ignore
     public void replaceSameContentThenDelete() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceSameContentThenDelete(0);
@@ -781,7 +781,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void replaceSameContentThenDelete_isRepeatable() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceSameContentThenDelete(0);
@@ -802,7 +802,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> replaceSameContentThenDelete_expected(final TxnDoc<T> replaced, final TxnDoc<T> deleted, final int offset);
 
-    @Test
+    @Test @Ignore
     public void replaceDifferentContentThenDelete() throws LockException, SAXException, PermissionDeniedException,
             EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceDifferentContentThenDelete(0);
@@ -850,7 +850,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void replaceDifferentContentThenDelete_isRepeatable() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceDifferentContentThenDelete(0);
@@ -864,7 +864,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> replaceDifferentContentThenDelete_expected(final TxnDoc<T> original, final TxnDoc<T> replacement, final TxnDoc<T> deleted, final int offset);
 
-    @Test
+    @Test @Ignore
     public void replaceSameContentWithoutCommitThenDelete() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceSameContentWithoutCommitThenDelete(0);
@@ -961,7 +961,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> replaceSameContentWithoutCommitThenDelete_expected(final TxnDoc<T> replaced, final TxnDoc<T> deleted, final int offset);
 
-    @Test
+    @Test @Ignore
     public void replaceDifferentContentWithoutCommitThenDelete() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceDifferentContentWithoutCommitThenDelete(0);
@@ -1060,7 +1060,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> replaceDifferentContentWithoutCommitThenDelete_expected(final TxnDoc<T> original, final TxnDoc<T> replacement, final TxnDoc<T> deleted, final int offset);
 
-    @Test
+    @Test @Ignore
     public void replaceSameContentThenDeleteWithoutCommit() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceSameContentThenDeleteWithoutCommit(false, 0);
@@ -1114,7 +1114,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void replaceSameContentThenDeleteWithoutCommit_isRepeatable() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceSameContentThenDeleteWithoutCommit(false, 0);
@@ -1128,7 +1128,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> replaceSameContentThenDeleteWithoutCommit_expected(final TxnDoc<T> replaced, final TxnDoc<T> deleted, final int offset, final boolean overridesStore);
 
-    @Test
+    @Test @Ignore
     public void replaceDifferentContentThenDeleteWithoutCommit() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceDifferentContentThenDeleteWithoutCommit(false, 0);
@@ -1184,7 +1184,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void replaceDifferentContentThenDeleteWithoutCommit_isRepeatable() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceDifferentContentThenDeleteWithoutCommit(false, 0);
@@ -1198,7 +1198,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> replaceDifferentContentThenDeleteWithoutCommit_expected(final TxnDoc<T> original, final TxnDoc<T> replacement, final TxnDoc<T> deleted, final int offset, final boolean overridesStore);
 
-    @Test
+    @Test @Ignore
     public void replaceSameContentWithoutCommitThenDeleteWithoutCommit() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceSameContentWithoutCommitThenDeleteWithoutCommit(false, 0);
@@ -1251,7 +1251,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void replaceSameContentWithoutCommitThenDeleteWithoutCommit_isRepeatable() throws LockException,
             SAXException, PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceSameContentWithoutCommitThenDeleteWithoutCommit(false, 0);
@@ -1265,7 +1265,7 @@ public abstract class AbstractJournalTest<T> {
 
     protected abstract List<ExpectedLoggable> replaceSameContentWithoutCommitThenDeleteWithoutCommit_expected(final TxnDoc<T> replaced, final TxnDoc<T> deleted, final int offset);
 
-    @Test
+    @Test @Ignore
     public void replaceDifferentContentWithoutCommitThenDeleteWithoutCommit() throws LockException, SAXException,
             PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceDifferentContentWithoutCommitThenDeleteWithoutCommit(false, 0);
@@ -1320,7 +1320,7 @@ public abstract class AbstractJournalTest<T> {
                 readLatestJournalEntries());
     }
 
-    @Test
+    @Test @Ignore
     public void replaceDifferentContentWithoutCommitThenDeleteWithoutCommit_isRepeatable() throws LockException,
             SAXException, PermissionDeniedException, EXistException, IOException, DatabaseConfigurationException, NoSuchFieldException, IllegalAccessException {
         replaceDifferentContentWithoutCommitThenDeleteWithoutCommit(false, 0);
