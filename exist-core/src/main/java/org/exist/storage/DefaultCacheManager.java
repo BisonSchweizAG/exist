@@ -173,7 +173,7 @@ public class DefaultCacheManager implements CacheManager, BrokerPoolService
     @Override
     public void deregisterCache( Cache cache )
     {
-        for (Iterator<Cache> cacheIt = caches.iterator(); cacheIt.hasNext(); ) {
+        for (final Iterator<Cache> cacheIt = caches.iterator(); cacheIt.hasNext(); ) {
             if (cache == cacheIt.next()) {
                 cache.setCacheManager( null );
                 cacheIt.remove();

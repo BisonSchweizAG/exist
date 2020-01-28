@@ -160,14 +160,15 @@ public abstract class Paged implements AutoCloseable {
     /**
      * Close the underlying files.
      *
-     * @throws DBException
+     * @throws DBException if an error occurs whilst closing
      */
     @Override
     public void close() throws DBException {
         try {
             raf.close();
         } catch (final IOException e) {
-            throw new DBException("an error occurred while closing database file: " + e.getMessage());
+            throw new DBException("An error occurred whilst closing the database file '"
+                    + file == null ? "null" : FileUtils.fileName(file) + "': " + e.getMessage());
         }
     }
 
@@ -175,7 +176,7 @@ public abstract class Paged implements AutoCloseable {
      * Completely close down the instance and
      * all underlying resources and caches.
      */
-    public final void closeAndRemove() throws DBException {
+    public void closeAndRemove() throws DBException {
         close();
         FileUtils.deleteQuietly(file);
     }

@@ -1673,6 +1673,9 @@ public class BrokerPool extends BrokerPools implements BrokerPoolConstants, Data
                     // final notification to database services to shutdown
                     servicesManager.shutdown();
 
+                    // remove all remaining inactive brokers as we have shutdown now and no longer need those
+                    inactiveBrokers.clear();
+
                     // deregister JMX MBeans
                     AgentFactory.getInstance().closeDBInstance(this);
 
