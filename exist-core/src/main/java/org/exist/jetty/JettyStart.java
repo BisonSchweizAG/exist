@@ -485,6 +485,9 @@ public class JettyStart extends Observable implements LifeCycle.Listener {
     }
 
     private Optional<Server> startJetty(final List<Object> configuredObjects) throws Exception {
+        // create tools/jetty/logs directory if it is missing
+        ensureJettyLogsDirectory();
+        
         // For all objects created by XmlConfigurations, start them if they are lifecycles.
         Optional<Server> server = Optional.empty();
         for (final Object configuredObject : configuredObjects) {
@@ -520,6 +523,21 @@ public class JettyStart extends Observable implements LifeCycle.Listener {
         }
 
         return server;
+    }
+
+    private void ensureJettyLogsDirectory() {
+        String jettyHome = System.getProperty(JETTY_HOME_PROP, "");
+        if (!jettyHome.isEmpty()) {
+            Path logsDirectory = Paths.get(jettyHome, "logs");
+            if (!Files.exists(logsDirectory)) {
+                try {
+                    logger.info("[Creating jetty logs directory : {}]", logsDirectory);
+                    Files.createDirectories(logsDirectory);
+                } catch (IOException e) {
+                    logger.error("Unable to create jetty logs directory", e);
+                }
+            }
+        }
     }
 
     private Map<String, String> getConfigProperties(final Path configDir) throws IOException {
